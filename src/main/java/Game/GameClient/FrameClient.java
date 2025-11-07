@@ -9,12 +9,15 @@ import Console.CommandFactory;
 import Console.CommandUtil;
 import java.io.IOException;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
  * @author diego
  */
 public class FrameClient extends javax.swing.JFrame {
+    
+    
 
     private Client client;
     /**
@@ -26,12 +29,17 @@ public class FrameClient extends javax.swing.JFrame {
         this.setTitle(name);
         client =  new Client(this, name);
         
+        crearMapaClient crearMapa = new crearMapaClient(this);
         
+        crearMapa.crearMapa();
+
     }
     
     public void writeMessage(String msg){
         txaMessages.append(msg + "\n");
     }
+    
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -184,6 +192,12 @@ public class FrameClient extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSendActionPerformed
 
+    public JPanel getPnlMap() {
+        return pnlMap;
+    }
+
+    
+    
     /**
      * @param args the command line arguments
      */
