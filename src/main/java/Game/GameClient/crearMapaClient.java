@@ -4,6 +4,7 @@
  */
 package Game.GameClient;
 
+import Game.GameMap.Cell;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -42,6 +43,8 @@ public class crearMapaClient {
                 lblCasilla.setBackground(new java.awt.Color(50, 117, 168));
                 
                 pantalla.getPnlMap().add(lblCasilla);
+                
+                new Cell(x,y,100,false,false,false,lblCasilla);
                 
             }
         }

@@ -7,6 +7,7 @@ package Game.GameClient;
 import Console.Command;
 import Console.CommandFactory;
 import Console.CommandUtil;
+import Game.GameMap.MapGrid;
 import java.io.IOException;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,6 +21,7 @@ public class FrameClient extends javax.swing.JFrame {
     
 
     private Client client;
+    private MapGrid mapa;
     /**
      * Creates new form FrameClient
      */
@@ -28,6 +30,8 @@ public class FrameClient extends javax.swing.JFrame {
         String name = JOptionPane.showInputDialog(this, "Ingrese su nombre");
         this.setTitle(name);
         client =  new Client(this, name);
+        //mapa = new MapGrid()
+        //TODO: implementar el MapGrid para el; arreglo de celdas.
         
         crearMapaClient crearMapa = new crearMapaClient(this);
         
