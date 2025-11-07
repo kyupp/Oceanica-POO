@@ -7,6 +7,7 @@ package Game.GameClient;
 import Console.Command;
 import Console.CommandFactory;
 import Console.CommandUtil;
+import Game.GameMap.Cell;
 import Game.GameMap.MapGrid;
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -21,7 +22,8 @@ public class FrameClient extends javax.swing.JFrame {
     
 
     private Client client;
-    private MapGrid mapa;
+    private MapGrid map;
+    private Cell[][] grid = new Cell[20][30];
     /**
      * Creates new form FrameClient
      */
@@ -30,8 +32,7 @@ public class FrameClient extends javax.swing.JFrame {
         String name = JOptionPane.showInputDialog(this, "Ingrese su nombre");
         this.setTitle(name);
         client =  new Client(this, name);
-        //mapa = new MapGrid()
-        //TODO: implementar el MapGrid para el; arreglo de celdas.
+        map = new MapGrid(grid, 20, 30);
         
         crearMapaClient crearMapa = new crearMapaClient(this);
         
@@ -42,6 +43,12 @@ public class FrameClient extends javax.swing.JFrame {
     public void writeMessage(String msg){
         txaMessages.append(msg + "\n");
     }
+
+    public MapGrid getMap() {
+        return map;
+    }
+    
+    
     
    
 
@@ -67,7 +74,6 @@ public class FrameClient extends javax.swing.JFrame {
         pnlPlayers = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         txaMessages.setColumns(20);
         txaMessages.setRows(5);
@@ -96,18 +102,18 @@ public class FrameClient extends javax.swing.JFrame {
         pnlMap.setLayout(pnlMapLayout);
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 693, Short.MAX_VALUE)
+            .addGap(0, 660, Short.MAX_VALUE)
         );
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 441, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pnlPlayerInfoLayout = new javax.swing.GroupLayout(pnlPlayerInfo);
         pnlPlayerInfo.setLayout(pnlPlayerInfoLayout);
         pnlPlayerInfoLayout.setHorizontalGroup(
             pnlPlayerInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 697, Short.MAX_VALUE)
         );
         pnlPlayerInfoLayout.setVerticalGroup(
             pnlPlayerInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,9 +144,9 @@ public class FrameClient extends javax.swing.JFrame {
                             .addComponent(jScrollPane2)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -157,10 +163,10 @@ public class FrameClient extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlPlayers, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

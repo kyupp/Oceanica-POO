@@ -35,6 +35,12 @@ public class MapGrid {
         return grid[x][y];
     }
     
+    public void addCell(int x, int y, Cell cell){
+        
+        grid[x][y] = cell;
+        
+    }
+    
     public ArrayList<Cell> getCellsByFighter(Fighter f){
         ArrayList<Cell> fighterList = new ArrayList<Cell>();
         //TODO: Recorrer todas las ceeldas,

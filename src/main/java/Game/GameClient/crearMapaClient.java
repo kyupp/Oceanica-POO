@@ -27,24 +27,28 @@ public class crearMapaClient {
         int size = 22;
         int x,y;
         
-        for (int fila = 0; fila <= FILAS; fila++){
-            for (int columna = 0; columna <= COLUMNAS; columna++){
+        for (int fila = 0; fila < FILAS; fila++){
+            for (int columna = 0; columna < COLUMNAS; columna++){
                 
                 // Calcular coordenadas en píxeles
-                x = columna * size;
-                y = fila * size;
+                x = fila * size;
+                y = columna * size;
 
                 // Crear el JLabel visual
                 JLabel lblCasilla = new JLabel();
                 lblCasilla.setOpaque(true);
                 lblCasilla.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                lblCasilla.setBounds(x, y, size, size);
+                lblCasilla.setBounds(y, x, size, size);
 
                 lblCasilla.setBackground(new java.awt.Color(50, 117, 168));
                 
                 pantalla.getPnlMap().add(lblCasilla);
                 
-                new Cell(x,y,100,false,false,false,lblCasilla);
+                Cell cell = new Cell(x,y,100,false,false,false,lblCasilla);
+                
+                //System.out.println("Intento:" + fila +", " + columna);
+                
+                pantalla.getMap().addCell(fila, columna, cell);
                 
             }
         }
