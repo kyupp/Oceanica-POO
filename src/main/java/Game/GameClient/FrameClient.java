@@ -10,8 +10,10 @@ import Console.CommandUtil;
 import Game.GameMap.Cell;
 import Game.GameMap.MapGrid;
 import java.io.IOException;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
@@ -24,6 +26,10 @@ public class FrameClient extends javax.swing.JFrame {
     private Client client;
     private MapGrid map;
     private Cell[][] grid = new Cell[20][30];
+    private modelClient model;
+    private controllerClient controller;
+    
+    
     /**
      * Creates new form FrameClient
      */
@@ -37,6 +43,9 @@ public class FrameClient extends javax.swing.JFrame {
         crearMapaClient crearMapa = new crearMapaClient(this);
         
         crearMapa.crearMapa();
+        
+        this.model = new modelClient(this.client);
+        this.controller = new controllerClient(this.model, this);
 
     }
     
@@ -48,8 +57,13 @@ public class FrameClient extends javax.swing.JFrame {
         return map;
     }
     
-    
-    
+    public void mostrarMensaje(String mensaje) {
+        this.writeMessage(mensaje); 
+    }
+
+    public JTextField getTxfCommand() {
+        return txfCommand;
+    }
    
 
     /**
@@ -77,6 +91,7 @@ public class FrameClient extends javax.swing.JFrame {
 
         txaMessages.setColumns(20);
         txaMessages.setRows(5);
+        txaMessages.setEnabled(false);
         jScrollPane1.setViewportView(txaMessages);
 
         btnSend.setText("SEND");
@@ -88,11 +103,13 @@ public class FrameClient extends javax.swing.JFrame {
 
         txaLog.setColumns(20);
         txaLog.setRows(5);
+        txaLog.setEnabled(false);
         jScrollPane2.setViewportView(txaLog);
 
         txaAttackResult.setColumns(20);
         txaAttackResult.setRows(5);
         txaAttackResult.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txaAttackResult.setEnabled(false);
         jScrollPane3.setViewportView(txaAttackResult);
 
         pnlMap.setBackground(new java.awt.Color(255, 255, 255));
@@ -182,28 +199,15 @@ public class FrameClient extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
-        //obnter string del txf y quitar espacio
-        String msg =  txfCommand.getText().trim();
-        if (msg.length()>0){
-            String args[] = CommandUtil.tokenizerArgs(msg);
-            if (args.length > 0){
-                Command comando = CommandFactory.getCommand(args);
-                if (comando != null){
-                    try {
-                        client.objectSender.writeObject(comando);
-                    } catch (IOException ex) {
-                        
-                    }
-                }else{
-                    this.writeMessage("Error: comando desconocido");
-                }
-                
-            }
-        }
+
     }//GEN-LAST:event_btnSendActionPerformed
 
     public JPanel getPnlMap() {
         return pnlMap;
+    }
+
+    public JButton getBtnSend() {
+        return btnSend;
     }
 
     
