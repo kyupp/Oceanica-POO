@@ -42,6 +42,7 @@ public class FrameServer extends javax.swing.JFrame {
 
         txaServerMessages.setColumns(20);
         txaServerMessages.setRows(5);
+        txaServerMessages.setEnabled(false);
         jScrollPane1.setViewportView(txaServerMessages);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

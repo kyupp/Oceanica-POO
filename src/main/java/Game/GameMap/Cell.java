@@ -6,6 +6,7 @@ package Game.GameMap;
 
 import Fighters.Fighter;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Cell {
     boolean hasVolcano;
     boolean hasSwirl;
     boolean isRadioactive;
+    private JLabel celda;
 
     public Cell(int x, int y, double lifePercent, Fighter owner, ArrayList<String> attackHistory, boolean hasVolcano, boolean hasSwirl, boolean isRadioactive) {
         this.x = x;
@@ -31,6 +33,16 @@ public class Cell {
         this.hasVolcano = hasVolcano;
         this.hasSwirl = hasSwirl;
         this.isRadioactive = isRadioactive;
+    }
+
+    public Cell(int x, int y, double lifePercent, boolean hasVolcano, boolean hasSwirl, boolean isRadioactive, JLabel celda) {
+        this.x = x;
+        this.y = y;
+        this.lifePercent = lifePercent;
+        this.hasVolcano = hasVolcano;
+        this.hasSwirl = hasSwirl;
+        this.isRadioactive = isRadioactive;
+        this.celda = celda;
     }
     
     public boolean isDestroyed() {

@@ -7,16 +7,29 @@ package Game.GameClient;
 import Console.Command;
 import Console.CommandFactory;
 import Console.CommandUtil;
+import Game.GameMap.Cell;
+import Game.GameMap.MapGrid;
 import java.io.IOException;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  *
  * @author diego
  */
 public class FrameClient extends javax.swing.JFrame {
+    
+    
 
     private Client client;
+    private MapGrid map;
+    private Cell[][] grid = new Cell[20][30];
+    private modelClient model;
+    private controllerClient controller;
+    
+    
     /**
      * Creates new form FrameClient
      */
@@ -25,13 +38,33 @@ public class FrameClient extends javax.swing.JFrame {
         String name = JOptionPane.showInputDialog(this, "Ingrese su nombre");
         this.setTitle(name);
         client =  new Client(this, name);
+        map = new MapGrid(grid, 20, 30);
         
+        crearMapaClient crearMapa = new crearMapaClient(this);
         
+        crearMapa.crearMapa();
+        
+        this.model = new modelClient(this.client);
+        this.controller = new controllerClient(this.model, this);
+
     }
     
     public void writeMessage(String msg){
         txaMessages.append(msg + "\n");
     }
+
+    public MapGrid getMap() {
+        return map;
+    }
+    
+    public void mostrarMensaje(String mensaje) {
+        this.writeMessage(mensaje); 
+    }
+
+    public JTextField getTxfCommand() {
+        return txfCommand;
+    }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -55,10 +88,10 @@ public class FrameClient extends javax.swing.JFrame {
         pnlPlayers = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1280, 720));
 
         txaMessages.setColumns(20);
         txaMessages.setRows(5);
+        txaMessages.setEnabled(false);
         jScrollPane1.setViewportView(txaMessages);
 
         btnSend.setText("SEND");
@@ -70,11 +103,13 @@ public class FrameClient extends javax.swing.JFrame {
 
         txaLog.setColumns(20);
         txaLog.setRows(5);
+        txaLog.setEnabled(false);
         jScrollPane2.setViewportView(txaLog);
 
         txaAttackResult.setColumns(20);
         txaAttackResult.setRows(5);
         txaAttackResult.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txaAttackResult.setEnabled(false);
         jScrollPane3.setViewportView(txaAttackResult);
 
         pnlMap.setBackground(new java.awt.Color(255, 255, 255));
@@ -84,18 +119,18 @@ public class FrameClient extends javax.swing.JFrame {
         pnlMap.setLayout(pnlMapLayout);
         pnlMapLayout.setHorizontalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 693, Short.MAX_VALUE)
+            .addGap(0, 660, Short.MAX_VALUE)
         );
         pnlMapLayout.setVerticalGroup(
             pnlMapLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 441, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout pnlPlayerInfoLayout = new javax.swing.GroupLayout(pnlPlayerInfo);
         pnlPlayerInfo.setLayout(pnlPlayerInfoLayout);
         pnlPlayerInfoLayout.setHorizontalGroup(
             pnlPlayerInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 697, Short.MAX_VALUE)
         );
         pnlPlayerInfoLayout.setVerticalGroup(
             pnlPlayerInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -126,9 +161,9 @@ public class FrameClient extends javax.swing.JFrame {
                             .addComponent(jScrollPane2)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(pnlPlayers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -145,10 +180,10 @@ public class FrameClient extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(pnlMap, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnlMap, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(pnlPlayerInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlPlayers, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -164,26 +199,19 @@ public class FrameClient extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
-        //obnter string del txf y quitar espacio
-        String msg =  txfCommand.getText().trim();
-        if (msg.length()>0){
-            String args[] = CommandUtil.tokenizerArgs(msg);
-            if (args.length > 0){
-                Command comando = CommandFactory.getCommand(args);
-                if (comando != null){
-                    try {
-                        client.objectSender.writeObject(comando);
-                    } catch (IOException ex) {
-                        
-                    }
-                }else{
-                    this.writeMessage("Error: comando desconocido");
-                }
-                
-            }
-        }
+
     }//GEN-LAST:event_btnSendActionPerformed
 
+    public JPanel getPnlMap() {
+        return pnlMap;
+    }
+
+    public JButton getBtnSend() {
+        return btnSend;
+    }
+
+    
+    
     /**
      * @param args the command line arguments
      */
