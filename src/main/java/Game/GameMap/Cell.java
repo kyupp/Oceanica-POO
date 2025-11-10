@@ -13,6 +13,7 @@ import javax.swing.JLabel;
  * @author kyup
  */
 public class Cell {
+
     private int x;
     private int y;
     private double lifePercent;
@@ -44,17 +45,71 @@ public class Cell {
         this.celda = celda;
     }
     
-    public String applyDamage(double amount){
-        //TODO: Crear logica
-        return "Daño realizado -> "+amount;
-    }
-    
-    public void logAttack(String entry){
-        //TODO: Crear logica
-    }
-    
-    public boolean isDestroyed(){
+    public boolean isDestroyed() {
         return lifePercent <= 0;
     }
-    
+
+    public void setHasVolcano(boolean hasVolcano) {
+        this.hasVolcano = hasVolcano;
+    }
+
+    public void setHasSwirl(boolean hasSwirl) {
+        this.hasSwirl = hasSwirl;
+    }
+
+    public void setIsRadioactive(boolean isRadioactive) {
+        this.isRadioactive = isRadioactive;
+    }
+
+    public String applyDamage(double amount) {
+        double oldLife = this.lifePercent;
+        this.lifePercent -= amount;
+
+        if (this.lifePercent < 0) {
+            this.lifePercent = 0;
+        }
+
+        String damageInfo = String.format("Celda (%d,%d): %.1f%% -> %.1f%% (daño: %.1f%%)",
+                x, y, oldLife, lifePercent, amount);
+
+        // Registrar en historial
+        String entry = "Daño recibido: " + amount + "% | Vida restante: " + lifePercent + "%";
+        logAttack(entry);
+
+        return damageInfo;
+    }
+
+    public void logAttack(String entry) {
+        if (this.attackHistory == null) {
+            this.attackHistory = new ArrayList<>();
+        }
+
+        String timestamp = java.time.LocalDateTime.now().toString();
+        this.attackHistory.add("[" + timestamp + "] " + entry);
+    }
+
+    public void heal(double amount) {
+        double oldLife = this.lifePercent;
+        this.lifePercent += amount;
+
+        if (this.lifePercent > 100) {
+            this.lifePercent = 100;
+        }
+
+        String entry = "Sanación: +" + amount + "% | Vida: " + oldLife + "% -> " + lifePercent + "%";
+        logAttack(entry);
+    }
+
+    public ArrayList<String> getAttackHistory() {
+        return this.attackHistory;
+    }
+
+    public int getLifePercent() {
+        return (int) this.lifePercent;
+    }
+
+    public Object getOwner() {
+        return this.owner;
+    }
+
 }
