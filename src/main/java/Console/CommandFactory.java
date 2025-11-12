@@ -25,6 +25,32 @@ public class CommandFactory {
                 return new CommandGiveup(args);
             case "NAME":
                 return new CommandName(args);
+            case "CREATE_FIGHTER":
+                return new CommandCreateFighter(args);
+            case "START_GAME":
+                return new CommandStartGame(args);
+            case "SKIP_TURN":
+                return new CommandSkipTurn(args);
+            case "QUERY_CELL":
+                return new CommandQueryCell(args);
+            case "LOG":
+                return new CommandLog(args);
+            case "LOG_SUMMARY":
+                return new CommandLogSummary(args);
+            case "QUERY_ENEMY":
+                return new CommandQueryEnemy(args);
+            case "SHOW_OCCUPIED":
+                return new CommandShowOccupied(args);
+            case "SHOW_PERCENTAGES":
+                return new CommandShowPercentages(args);
+            case "SHOW_ALIVE":
+                return new CommandShowAlive(args);
+            case "USE_POWER":
+                return new CommandUsePower(args);
+            case "USE_RESISTANCE":
+                return new CommandUseResistance(args);
+            case "USE_SANITY":
+                return new CommandUseSanity(args);
             default:
                 return null;
         }
