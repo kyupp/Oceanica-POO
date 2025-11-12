@@ -39,6 +39,12 @@ public class MapGrid {
             }
         }
     }
+    
+    public void addCell(int fila, int columna, Cell celda){
+        
+        grid[fila][columna] = celda;
+        
+    }
 
     public void healArea(int x, int y, int radius, int percent) {
         for (int dx = -radius; dx <= radius; dx++) {
