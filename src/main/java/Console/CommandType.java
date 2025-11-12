@@ -13,8 +13,23 @@ public enum CommandType {
     MESSAGE (2), //message hola a todos
     PRIVATE_MESSAGE(3), //private Andres hola andres
     GIVEUP (1), //giveup
-    NAME (2);
-    //.. AGREGARÍAN MÁS TIPOS DE COMANDO
+    NAME (2),
+    CREATE_FIGHTER (8),
+    START_GAME (1),
+    SKIP_TURN (1),
+    QUERY_CELL (3),
+    LOG (1),
+    LOG_SUMMARY (1),
+    QUERY_ENEMY (2),
+    SHOW_OCCUPIED (1),
+    SHOW_PERCENTAGES (1),
+    SHOW_ALIVE (1),
+    USE_POWER(2),
+    USE_RESISTANCE (2),
+    USE_SANITY (2);
+    
+    
+    
     
     
     private int requiredParameters;

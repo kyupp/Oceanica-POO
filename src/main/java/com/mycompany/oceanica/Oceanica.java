@@ -14,14 +14,9 @@ import Game.GameServer.FrameServer;
 public class Oceanica {
 
     public static void main(String[] args) {
-        //System.out.println("Hello World!");
         
-        FrameServer server = new FrameServer();
-        server.setVisible(true);
-        FrameClient client = new FrameClient();
-        client.setVisible(true);
-        
-        
-        
+        StartOceanica.StartOceanica();
+         
     }
 }
+ 
