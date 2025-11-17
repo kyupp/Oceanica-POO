@@ -20,20 +20,18 @@ public class Fighter {
     private double power;
     private double resistance;
     private double sanity;
-    private int percentagleOfCivilization;
-    private String attackGroup;
+    private int percentageOfCivilization;
     private double nextAttackBoost = 1.0; // Multiplicador para el siguiente ataque
     private boolean isProtected = false;
     private double protectionLevel = 1.0;
 
-    public Fighter(String name, String imagePath, double power, double resistance, double sanity, int percentagleOfCivilization, String attackGroup) {
+    public Fighter(String name, String imagePath, double power, double resistance, double sanity, int percentagleOfCivilization) {
         this.name = name;
         this.imagePath = imagePath;
         this.power = power;
         this.resistance = resistance;
         this.sanity = sanity;
-        this.percentagleOfCivilization = percentagleOfCivilization;
-        this.attackGroup = attackGroup;
+        this.percentageOfCivilization = percentagleOfCivilization;
     }
 
     public String getName() {
@@ -77,19 +75,11 @@ public class Fighter {
     }
 
     public int getPercentagleOfCivilization() {
-        return percentagleOfCivilization;
+        return percentageOfCivilization;
     }
 
     public void setPercentagleOfCivilization(int percentagleOfCivilization) {
-        this.percentagleOfCivilization = percentagleOfCivilization;
-    }
-
-    public String getAttackGroup() {
-        return attackGroup;
-    }
-
-    public void setAttackGroup(String attackGroup) {
-        this.attackGroup = attackGroup;
+        this.percentageOfCivilization = percentagleOfCivilization;
     }
 
     /*

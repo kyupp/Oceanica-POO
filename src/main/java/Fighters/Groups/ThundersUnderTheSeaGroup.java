@@ -23,9 +23,9 @@ public class ThundersUnderTheSeaGroup extends Fighter {
 
     public ThundersUnderTheSeaGroup(String name, String imagePath, double power,
             double resistance, double sanity,
-            int percentagleOfCivilization, String attackGroup) {
+            int percentagleOfCivilization) {
         super(name, imagePath, power, resistance, sanity,
-                percentagleOfCivilization, attackGroup);
+                percentagleOfCivilization);
     }
 
     /**

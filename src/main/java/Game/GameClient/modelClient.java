@@ -25,18 +25,36 @@ public class modelClient {
         if (comandoIngresado.length() > 0) {
             String args[] = CommandUtil.tokenizerArgs(comandoIngresado);
             if (args.length > 0) {
-                Command comando = CommandFactory.getCommand(args);
-                if (comando != null) {
-                    try {
-                        client.objectSender.writeObject(comando);
-                    } catch (IOException ex) {
-                        return "Error: no se pudo enviar el comando";
-                    }
-                } else {
-                    return "Error: comando desconocido";
+                switch (args[0]){
+                    case "CreateFigher":
+                        if (client.getRefFrame().comprobarCantidadFighers()){
+                            Command comando = CommandFactory.getCommand(args);
+                            if (comando != null){
+                                client.getRefFrame().aumentarContadorFighters();
+                                return enviarComandoServer(comando);
+                            }
+                        }else{
+                            return "Error:  La cantidad maxima de fighters fue alcanzada";
+                        }
+                    default:
+                        Command comando = CommandFactory.getCommand(args);
+                        return enviarComandoServer(comando);
                 }
             }
         }
+        return "";
+    }
+    
+    public String enviarComandoServer(Command comando){
+        if (comando != null) {
+            try {
+                client.objectSender.writeObject(comando);
+            } catch (IOException ex) {
+                return "Error: no se pudo enviar el comando";
+            }
+        } else {
+            return "Error: comando desconocido";
+         }
         return "";
     }
 
