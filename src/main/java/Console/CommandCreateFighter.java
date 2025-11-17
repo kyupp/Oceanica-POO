@@ -4,6 +4,7 @@
  */
 package Console;
 
+import Civilization.Civilization;
 import Fighters.Fighter;
 import Fighters.Groups.ChooseFighterGroup;
 import Game.GameServer.ThreadServidor;
@@ -21,18 +22,13 @@ public class CommandCreateFighter extends Command {
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
+        // No es broadcast - solo confirmar al cliente
         this.setIsBroadcast(false);
 
         String[] parameters = this.getParameters();
 
         if (parameters.length != 8) {
-            String msg = """
-                         Error: Uso incorrecto del comando.
-                         Correcto: createfighter <name> <imagePath> <power> <resistance> <sanity> <civilization%> <attackGroup>
-                         """;
-
-            // ❗ Notificación privada al usuario
-            sendPrivateResponse(threadServidor, msg);
+            sendResponse(threadServidor, " Error: Formato incorrecto del comando");
             return;
         }
 
@@ -46,37 +42,72 @@ public class CommandCreateFighter extends Command {
             int civilization = Integer.parseInt(parameters[6]);
             String attackGroup = parameters[7];
 
+            //  Verificar que el jugador tenga civilización
+            if (!threadServidor.hasCivilization()) {
+                // Crear civilización si no existe
+                threadServidor.getServer().registerCivilization(threadServidor.name);
+            }
+
+            Civilization civ = threadServidor.getCivilization();
+
+            //  Validaciones en servidor
+            if (civ.getFighters().size() >= 3) {
+                sendResponse(threadServidor, " Ya tienes 3 fighters");
+                return;
+            }
+
+            // Validar porcentaje total
+            int totalPercent = civilization;
+            for (Fighter f : civ.getFighters()) {
+                totalPercent += f.getPercentagleOfCivilization();
+            }
+
+            if (totalPercent > 100) {
+                sendResponse(threadServidor,
+                        " Porcentaje total excedería 100% (actual: " + totalPercent + "%)");
+                return;
+            }
+
+            // Crear fighter en servidor
             Fighter fighter = ChooseFighterGroup.ChooseFighterGroup(
                     name, imagePath, power, resistance, sanity, civilization, attackGroup
             );
 
-            // ❗ Notificación al usuario indicando éxito
-            sendPrivateResponse(threadServidor,
-                    "Fighter creado exitosamente: " + fighter.getName());
+            if (fighter == null) {
+                sendResponse(threadServidor, " Grupo de ataque inválido: " + attackGroup);
+                return;
+            }
+
+            // Agregar a civilización del servidor
+            civ.addFighter(fighter);
+
+            // Log en servidor
+            threadServidor.getServer().getRefFrame().writeMessage(
+                    String.format("%s creó fighter: %s (%s) - %d%% | Fighters: %d/3",
+                            threadServidor.name, name, attackGroup, civilization,
+                            civ.getFighters().size())
+            );
+
+            // Confirmar al cliente
+            sendResponse(threadServidor,
+                    "Fighter registrado en servidor: " + name);
 
         } catch (NumberFormatException e) {
-            // ❗ Error por parámetros numéricos incorrectos
-            sendPrivateResponse(threadServidor,
-                    "Error: valores numéricos inválidos. Verifique power, resistance, sanity y civilization.");
+            sendResponse(threadServidor, " Error: valores numéricos inválidos");
         } catch (Exception e) {
-            // ❗ Error genérico, no rompemos el servidor
-            sendPrivateResponse(threadServidor,
-                    "Error inesperado al crear fighter: " + e.getMessage());
+            sendResponse(threadServidor, " Error inesperado: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     /**
-     * Envía un mensaje privado al cliente usando CommandMessage
+     * Envía respuesta privada al cliente
      */
-    private void sendPrivateResponse(ThreadServidor thread, String message) {
+    private void sendResponse(ThreadServidor thread, String message) {
         try {
-            String[] msgArgs = new String[]{"MESSAGE", message, "false"}; // false = privado
-            CommandMessage response = new CommandMessage(msgArgs);
-            thread.objectSender.writeObject(response);
-            thread.objectSender.flush();
-        } catch (IOException io) {
-            System.out.println("No se pudo enviar respuesta al cliente: " + io.getMessage());
+            thread.sendPrivateMessage(message);
+        } catch (Exception e) {
+            System.out.println("Error enviando respuesta: " + e.getMessage());
         }
     }
 }
-

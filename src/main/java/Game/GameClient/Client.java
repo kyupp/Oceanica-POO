@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author diego
+ * @author mathi
  */
 public class Client {
     private final int PORT = 35500;

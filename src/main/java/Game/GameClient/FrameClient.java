@@ -4,6 +4,7 @@
  */
 package Game.GameClient;
 
+import Civilization.Civilization;
 import Console.Command;
 import Console.CommandFactory;
 import Console.CommandUtil;
@@ -30,28 +31,109 @@ public class FrameClient extends javax.swing.JFrame {
     private modelClient model;
     private controllerClient controller;
     private int contadorFighters = 0;   //Cuenta los fighters creador, 3 max.
+
+    // Civilización local del cliente
+    private Civilization myCivilization;
+    private String civilizationName;
     
-    
-    /**
-     * Creates new form FrameClient
-     */
     public FrameClient() {
         initComponents();
-        String name = JOptionPane.showInputDialog(this, "Ingrese su nombre");
-        this.setTitle(name);
-        client =  new Client(this, name);
+        
+        // Pedir nombre de civilización
+        civilizationName = JOptionPane.showInputDialog(this, "Ingrese nombre de su civilización");
+        if (civilizationName == null || civilizationName.trim().isEmpty()) {
+            civilizationName = "Civilization_" + System.currentTimeMillis();
+        }
+        
+        this.setTitle(civilizationName);
+        
+        // Crear civilización local
+        this.myCivilization = new Civilization(civilizationName);
+        
+        // Crear cliente con el nombre de civilización
+        client = new Client(this, civilizationName);
+        
+        // Inicializar mapa
         map = new MapGrid(grid, 20, 30);
-        
         crearMapaClient crearMapa = new crearMapaClient(this);
-        
         crearMapa.crearMapa();
         
-        this.model = new modelClient(this.client);
+        // Asociar el mapa a la civilización
+        myCivilization.setMap(map);
+        
+        this.model = new modelClient(this.client, this.myCivilization);
         this.controller = new controllerClient(this.model, this);
-
+        
+        // Enviar comando al servidor para registrar civilización
+        registrarCivilizacionEnServidor();
     }
     
-    public void writeMessage(String msg){
+    /**
+     * Registra la civilización en el servidor
+     */
+    private void registrarCivilizacionEnServidor() {
+        try {
+            // El comando NAME ya lo hace, pero podemos verificar
+            writeMessage("Registrando civilización: " + civilizationName);
+        } catch (Exception e) {
+            writeMessage("Error al registrar civilización: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Obtener civilización local
+     */
+    public Civilization getMyCivilization() {
+        return myCivilization;
+    }
+    
+    /**
+     * Obtener nombre de civilización
+     */
+    public String getCivilizationName() {
+        return civilizationName;
+    }
+    
+    /**
+     * Ahora valida contra la civilización local
+     */
+    public boolean comprobarCantidadFighers() {
+        return myCivilization.getFighters().size() < CANTIDAD_MAX_FIGHTERS;
+    }
+    
+    /**
+     * Actualizar contador basado en civilización
+     */
+    public void actualizarContadorFighters() {
+        this.contadorFighters = myCivilization.getFighters().size();
+    }
+    
+    /**
+     * Mostrar estado de la civilización
+     */
+    public void mostrarEstadoCivilizacion() {
+        StringBuilder estado = new StringBuilder();
+        estado.append("=== ESTADO DE ").append(civilizationName).append(" ===\n");
+        estado.append("Fighters: ").append(myCivilization.getFighters().size()).append("/3\n");
+        
+        int totalPorcentaje = 0;
+        for (var fighter : myCivilization.getFighters()) {
+            estado.append("- ").append(fighter.getName())
+                  .append(": ").append(fighter.getPercentagleOfCivilization()).append("%\n");
+            totalPorcentaje += fighter.getPercentagleOfCivilization();
+        }
+        
+        estado.append("Total: ").append(totalPorcentaje).append("%\n");
+        
+        if (map != null) {
+            estado.append("Vida del mapa: ")
+                  .append(String.format("%.1f%%", map.getAlivePercentage())).append("\n");
+        }
+        
+        writeMessage(estado.toString());
+    }
+    
+    public void writeMessage(String msg) {
         txaMessages.append(msg + "\n");
     }
 
@@ -70,9 +152,9 @@ public class FrameClient extends javax.swing.JFrame {
     public int getContadorFighters() {
         return contadorFighters;
     }
-    
-    public boolean comprobarCantidadFighers(){
-        return this.contadorFighters < this.CANTIDAD_MAX_FIGHTERS;
+
+    public JTextArea getTxaMessages() {
+        return txaMessages;
     }
     
     public void aumentarContadorFighters(){
@@ -80,13 +162,6 @@ public class FrameClient extends javax.swing.JFrame {
             this.contadorFighters ++;       
         }
     }
-
-    public JTextArea getTxaMessages() {
-        return txaMessages;
-    }
-    
-    
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
