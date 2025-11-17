@@ -70,6 +70,14 @@ public class Client {
     public FrameClient getRefFrame() {
         return refFrame;
     }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public ThreadClient getThreadClient() {
+        return threadClient;
+    }
     
     
     

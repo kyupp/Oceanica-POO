@@ -5,6 +5,8 @@
 package Game.GameClient;
 
 import Console.Command;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +17,8 @@ import java.util.logging.Logger;
  */
 public class ThreadClient extends Thread{
     private Client client;
+    private DataOutputStream escritor;
+    private DataInputStream lector;
     
     private boolean isRunning = true;
 
@@ -43,7 +47,34 @@ public class ThreadClient extends Thread{
         
     }
     
+    public void leerString(){
+        try {
+            lector = new DataInputStream(client.getSocket().getInputStream());
+            String mensaje = lector.readUTF();
+            client.getRefFrame().getTxaMessages().append(mensaje + "\n");
+        } catch (IOException ex) {
+            client.getRefFrame().getTxaMessages().append("Error al leer mensaje del server\n");
+        }
+        
+    }
     
+    public void enviarString(String mensaje){
+        try {
+            escritor.writeUTF(mensaje);
+        } catch (IOException ex) {
+            client.getRefFrame().getTxaMessages().append("Error al enviar mensaje al server\n");
+        }
+    }
+    
+    public void showPrivateMessage(String message){
+        client.getRefFrame().writeMessage("[PRIVADO] " + message);
+    }
 
-    
+    /**
+     * Mostrar mensaje público en UI
+     */
+    public void showPublicMessage(String message){
+        client.getRefFrame().writeMessage("[GLOBAL] " + message);
+    }
+
 }

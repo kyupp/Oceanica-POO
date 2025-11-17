@@ -6,6 +6,10 @@ package Game.GameServer;
 
 import Civilization.Civilization;
 import Console.Command;
+import Console.CommandMessage;
+import Game.GameClient.Client;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,6 +25,8 @@ public class ThreadServidor extends Thread{
     // Streams para leer y escribir objetos
     public ObjectInputStream objectListener;
     public ObjectOutputStream objectSender;
+    private DataOutputStream escritor;
+    private DataInputStream lector;
     public String name;
     
     public boolean isActive = true;
@@ -148,6 +154,34 @@ public class ThreadServidor extends Thread{
             // TODO: enviar un comando de confirmación al cliente
         } catch (Exception e) {
             System.out.println("Error enviando confirmación: " + e.getMessage());
+        }
+    }
+    
+    public void sendPrivateMessage(String message) {
+        try {
+            // Formato: ["MESSAGE", texto, "false"]
+            String[] args = new String[]{"MESSAGE", message, "false"};
+            CommandMessage cmd = new CommandMessage(args);
+
+            objectSender.writeObject(cmd);
+            objectSender.flush();
+        } catch (IOException e) {
+            System.out.println("Error enviando mensaje privado: " + e.getMessage());
+        }
+    }
+    
+    public void sendBroadcastMessage(String message) {
+        for (ThreadServidor clientThread : server.getConnectedClients()) {
+            try {
+                // Formato: ["MESSAGE", texto, "true"]
+                String[] args = new String[]{"MESSAGE", message, "true"};
+                CommandMessage cmd = new CommandMessage(args);
+
+                clientThread.objectSender.writeObject(cmd);
+                clientThread.objectSender.flush();
+            } catch (IOException e) {
+                System.out.println("Error enviando broadcast: " + e.getMessage());
+            }
         }
     }
 }
