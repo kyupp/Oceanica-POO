@@ -19,7 +19,7 @@ import java.io.IOException;
 public class modelClient {
 
     private Client client;
-    private Civilization myCivilization; // referencia a civilización local
+    private Civilization myCivilization; // ✅ NUEVO: referencia a civilización local
     
     public modelClient(Client client, Civilization myCivilization) {
         this.client = client;
@@ -27,7 +27,7 @@ public class modelClient {
     }
     
     /**
-     * procesa fighters localmente antes de enviar al servidor
+     * Ahora procesa fighters localmente antes de enviar al servidor
      */
     public String comprobarComando(String comandoIngresado) {
         if (comandoIngresado.length() > 0) {
@@ -55,7 +55,7 @@ public class modelClient {
     }
     
     /**
-     * Procesa creación de fighter localmente Y en servidor
+     * NUEVO: Procesa creación de fighter localmente Y en servidor
      */
     private String procesarCreateFighter(String[] args) {
         // Validar cantidad
@@ -82,7 +82,7 @@ public class modelClient {
             int civilizationPercent = Integer.parseInt(args[6]);
             String attackGroup = args[7];
             
-            // Validar porcentajes
+            //  Validar porcentajes
             int totalPercent = civilizationPercent;
             for (Fighter f : myCivilization.getFighters()) {
                 totalPercent += f.getPercentagleOfCivilization();
@@ -92,7 +92,7 @@ public class modelClient {
                 return "Error: El total de porcentajes excedería 100% (" + totalPercent + "%)\n";
             }
             
-            // Crear fighter LOCALMENTE
+            //  Crear fighter LOCALMENTE
             Fighter fighter = ChooseFighterGroup.ChooseFighterGroup(
                 name, imagePath, power, resistance, sanity, 
                 civilizationPercent, attackGroup
@@ -102,11 +102,18 @@ public class modelClient {
                 return "Error: Grupo de ataque inválido: " + attackGroup + "\n";
             }
             
-            // Agregar a civilización local
+            //  Agregar a civilización local
             myCivilization.addFighter(fighter);
             
-            // Actualizar UI
+            //  Actualizar UI
             client.getRefFrame().actualizarContadorFighters();
+            // Refrescar paneles de UI para mostrar el nuevo fighter sin duplicar mensajes
+            try {
+                client.getRefFrame().updatePlayerInfo();
+                client.getRefFrame().updateFightersDisplay();
+            } catch (Exception e) {
+                // Si no está disponible la UI en este contexto, continuar silenciosamente
+            }
             
             String mensaje = String.format(
                 " Fighter creado: %s (%s)\n" +
@@ -163,7 +170,7 @@ public class modelClient {
     }
     
     /**
-     * ✅ NUEVO: Muestra estado local sin consultar servidor
+     * NUEVO: Muestra estado local sin consultar servidor
      */
     private String mostrarEstadoLocal() {
         StringBuilder sb = new StringBuilder();
