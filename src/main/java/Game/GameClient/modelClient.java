@@ -25,8 +25,9 @@ public class modelClient {
         if (comandoIngresado.length() > 0) {
             String args[] = CommandUtil.tokenizerArgs(comandoIngresado);
             if (args.length > 0) {
-                switch (args[0]){
-                    case "CreateFigher":
+                switch (args[0].toUpperCase()){
+                    case "CREATE_FIGHTER":
+                        System.out.println(client.getRefFrame().comprobarCantidadFighers());
                         if (client.getRefFrame().comprobarCantidadFighers()){
                             Command comando = CommandFactory.getCommand(args);
                             if (comando != null){
@@ -34,7 +35,8 @@ public class modelClient {
                                 return enviarComandoServer(comando);
                             }
                         }else{
-                            return "Error:  La cantidad maxima de fighters fue alcanzada";
+                           return "Error:  La cantidad maxima de fighters fue alcanzada";
+                            
                         }
                     default:
                         Command comando = CommandFactory.getCommand(args);

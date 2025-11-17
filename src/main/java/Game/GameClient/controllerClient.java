@@ -41,6 +41,7 @@ public class controllerClient implements ActionListener{
     
     public void procesarComando(String comando) {
         String resultado = modelo.comprobarComando(comando);
+        view.getTxaMessages().append(resultado);
         if (!resultado.isEmpty()) {
             view.mostrarMensaje(resultado);
         }

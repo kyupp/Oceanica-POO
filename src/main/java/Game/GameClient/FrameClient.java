@@ -72,13 +72,12 @@ public class FrameClient extends javax.swing.JFrame {
     }
     
     public boolean comprobarCantidadFighers(){
-        
-        return this.contadorFighters <= this.CANTIDAD_MAX_FIGHTERS;
+        return this.contadorFighters < this.CANTIDAD_MAX_FIGHTERS;
     }
     
     public void aumentarContadorFighters(){
         if (comprobarCantidadFighers()){
-            this.contadorFighters ++;
+            this.contadorFighters ++;       
         }
     }
 
