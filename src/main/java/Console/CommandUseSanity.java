@@ -4,12 +4,16 @@
  */
 package Console;
 
+import Civilization.Civilization;
+import Fighters.Fighter;
+import Game.GameController;
 import Game.GameServer.ThreadServidor;
+import java.util.List;
 
-/**
- *
- * @author mathi
- */
+/*
+    @author gabri
+*/
+
 public class CommandUseSanity extends Command {
 
     public CommandUseSanity(String[] args) {
@@ -18,12 +22,46 @@ public class CommandUseSanity extends Command {
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
-        this.setIsBroadcast(false);
+        this.setIsBroadcast(true);
+        
+        String[] params = this.getParameters();
+        
+        if (params.length < 2) {
+            threadServidor.sendError("Uso: USE_SANITY <fighterName>");
+            return;
+        }
+        
+        GameController gc = threadServidor.getServer().getGameController();
+        
+        if (!gc.isGameStarted()) {
+            threadServidor.sendError("El juego no ha iniciado");
+            return;
+        }
+        
+        if (!threadServidor.isMyTurn()) {
+            threadServidor.sendError("No es tu turno");
+            return;
+        }
+        
+        String fighterName = params[1];
+        Civilization civ = threadServidor.getCivilization();
+        Fighter fighter = civ.getFighter(fighterName);
+        
+        if (fighter == null) {
+            threadServidor.sendError("Fighter no encontrado: " + fighterName);
+            return;
+        }
+        
+        List<String> log = fighter.useSanity(civ.getMap());
+        
+        for (String entry : log) {
+            civ.logEvent(entry);
+            threadServidor.getServer().getRefFrame().writeMessage(entry);
+        }
+        
+        // Avanzar turno
+        gc.nextTurn();
+        
+        threadServidor.sendConfirmation("Sanidad activada. Celdas curadas.");
     }
-    
-//    @Override
-//    public void processInClient(Client client) {
-//        System.out.println("Procesando un attack");
-//    }
-    
 }

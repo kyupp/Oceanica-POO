@@ -12,7 +12,7 @@ import Game.GameServer.ThreadServidor;
 import java.util.List;
 
 /*
-    @gabri
+    @author gabri
 */
 
 public class CommandAttack extends Command {
