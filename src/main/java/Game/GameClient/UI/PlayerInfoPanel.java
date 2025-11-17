@@ -45,7 +45,7 @@ public class PlayerInfoPanel extends JPanel {
         ));
         setBackground(Color.WHITE);
         
-        // ===== PANEL IZQUIERDO: Información General =====
+        // Información General
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setOpaque(false);
@@ -113,7 +113,7 @@ public class PlayerInfoPanel extends JPanel {
         
         add(leftPanel, BorderLayout.WEST);
         
-        // ===== PANEL DERECHO: Estadísticas por Fighter =====
+        // PANEL DERECHO: Estadísticas por Fighter
         fightersStatsPanel = new JPanel();
         fightersStatsPanel.setLayout(new GridLayout(1, 3, 10, 0));
         fightersStatsPanel.setOpaque(false);
