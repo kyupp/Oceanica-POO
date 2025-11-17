@@ -21,13 +21,14 @@ import javax.swing.JTextField;
  */
 public class FrameClient extends javax.swing.JFrame {
     
+    private final int CANTIDAD_MAX_FIGHTERS = 3;
     
-
     private Client client;
     private MapGrid map;
     private Cell[][] grid = new Cell[20][30];
     private modelClient model;
     private controllerClient controller;
+    private int contadorFighters = 0;   //Cuenta los fighters creador, 3 max.
     
     
     /**
@@ -63,6 +64,21 @@ public class FrameClient extends javax.swing.JFrame {
 
     public JTextField getTxfCommand() {
         return txfCommand;
+    }
+
+    public int getContadorFighters() {
+        return contadorFighters;
+    }
+    
+    public boolean comprobarCantidadFighers(){
+        
+        return this.contadorFighters <= this.CANTIDAD_MAX_FIGHTERS;
+    }
+    
+    public void aumentarContadorFighters(){
+        if (comprobarCantidadFighers()){
+            this.contadorFighters ++;
+        }
     }
    
 

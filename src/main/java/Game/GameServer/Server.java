@@ -29,7 +29,7 @@ public class Server {
         connectedClients = new ArrayList<ThreadServidor>();
         this.refFrame = refFrame;
         
-        // Inicializar GameController
+        // Inicializar GameController 
         this.gameController = new GameController();
         
         this.init();
