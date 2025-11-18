@@ -97,6 +97,22 @@ public class MapGrid {
 
         return totalCells > 0 ? (double) aliveCells / totalCells * 100.0 : 0.0;
     }
+    
+    public int getDeathCells(){
+        
+        int deathCells = 0;
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                if (grid[i][j] != null) {
+                    if (grid[i][j].isDestroyed()) {
+                        deathCells++;
+                    }
+                }
+            }
+        }
+        return deathCells;
+    }
 
     public double getFighterAlivePercentage(Fighter f) {
         ArrayList<Cell> fighterCells = getCellsByFighter(f);

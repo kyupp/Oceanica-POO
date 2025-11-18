@@ -7,6 +7,7 @@ package Console;
 import Game.GameClient.Client;
 import Game.GameMap.Cell;
 import Game.GameServer.ThreadServidor;
+import java.util.ArrayList;
 
 /**
  *
@@ -49,12 +50,13 @@ public class CommandQueryCell extends Command {
             }
 
             String message = "Información de celda (" + x + "," + y + "): " + cell;
-
-            // TODO: Enviar mensaje al usuario con la info de la cell
-            client.getRefFrame().writeMessage(message);
+            
+            String attackHistory = arrayListToString(cell.getAttackHistory());
+            
+            client.getRefFrame().writeMessage(message + "\n     Attack History: " + attackHistory);
 
         } catch (NumberFormatException e) {
-            // TODO: Enviar mensaje al usuario del error
+            
             client.getRefFrame().writeMessage(
                     "Error: los parámetros X e Y deben ser valores numéricos enteros."
             );
@@ -64,5 +66,12 @@ public class CommandQueryCell extends Command {
             );
         }
     }
+    
+    public static String arrayListToString(ArrayList<String> list) {
+        if (list == null) return "Todavia no ha recibido ataques";
+        
+        return String.join(" ", list);
+    }
+
 }
 

@@ -111,6 +111,8 @@ public class Cell {
     public Object getOwner() {
         return this.owner;
     }
+    
+    
 
     @Override
     public String toString() {

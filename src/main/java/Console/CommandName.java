@@ -19,10 +19,13 @@ public class CommandName extends Command{
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
-        this.setIsBroadcast(true);
-        threadServidor.name = getParameters()[1];
-        threadServidor.showAllClients();
+        String[] args = this.getParameters();
+        String clientName = args[1]; // El nombre viene como segundo parámetro
+        threadServidor.setClientName(clientName);
+
+        System.out.println("Cliente identificado como: " + clientName);
     }
+
     
     @Override
     public void processInClient(Client client) {
