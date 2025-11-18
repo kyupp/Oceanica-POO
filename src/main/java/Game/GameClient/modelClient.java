@@ -44,7 +44,8 @@ public class modelClient {
                     case "STATUS":
                         // Comando local para ver estado
                         return mostrarEstadoLocal();
-                    
+                    case "QUERY_CELL":
+                        return this.procesarQuerryCell(args);
                     default:
                         Command comando = CommandFactory.getCommand(args);
                         return enviarComandoServer(comando);
@@ -216,5 +217,27 @@ public class modelClient {
             return "Error: Comando desconocido\n";
         }
         return "";
+    }
+    
+    public String procesarQuerryCell(String[] args){
+        if (args.length != 3) {
+            return """
+                   Error: Formato incorrecto.
+                   Uso: QUERY_CELL <x> <y>
+                   """;
+        }
+        
+        try {
+            Command comando = CommandFactory.getCommand(args);
+            
+            comando.processInClient(this.client);
+            
+            return "";
+            
+        } catch (NumberFormatException e) {
+            return "Error: Valores numéricos inválidos\n";
+        } catch (Exception e) {
+            return "Error inesperado: " + e.getMessage() + "\n";
+        }
     }
 }

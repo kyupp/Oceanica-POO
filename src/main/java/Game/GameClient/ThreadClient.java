@@ -58,6 +58,10 @@ public class ThreadClient extends Thread{
         
     }
     
+    public void leerStringDirecto(String message){
+       client.getRefFrame().getTxaMessages().append(message + "\n");
+    }
+    
     public void enviarString(String mensaje){
         try {
             escritor.writeUTF(mensaje);
