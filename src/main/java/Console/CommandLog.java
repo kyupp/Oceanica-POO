@@ -4,7 +4,10 @@
  */
 package Console;
 
+import Fighters.Fighter;
 import Game.GameServer.ThreadServidor;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -19,11 +22,36 @@ public class CommandLog extends Command {
     @Override
     public void processForServer(ThreadServidor threadServidor) {
         this.setIsBroadcast(false);
+        
+        String[] parameters = this.getParameters();
+        
+        if (parameters.length != 1) {
+            sendResponse(threadServidor, " Error: Formato incorrecto del comando");
+            return;
+        }
+
+        try {
+            // Extraer parámetros
+            List<Fighter> list = threadServidor.getCivilization().getFighters();
+            String result = "";
+            for(Fighter f : list){
+                if(f.getPercentagleOfCivilization() >= 0){
+                    result += f.getName()+ " ";
+                }
+            }
+           sendResponse(threadServidor, result);
+        return;
+    } catch (Exception e) {
+            System.out.println("Error enviando respuesta: " + e.getMessage());
+        }
     }
-    
-//    @Override
-//    public void processInClient(Client client) {
-//        System.out.println("Procesando un attack");
-//    }
+        
+    private void sendResponse(ThreadServidor thread, String message) {
+        try {
+            thread.sendPrivateMessage(message);
+        } catch (Exception e) {
+            System.out.println("Error enviando respuesta: " + e.getMessage());
+        }
+    }
     
 }
