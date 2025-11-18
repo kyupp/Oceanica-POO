@@ -27,7 +27,7 @@ public class Client {
     public ObjectOutputStream objectSender;
     private ThreadClient threadClient;
     
-    public String name;
+    private String name;
 
     public Client(FrameClient refFrame, String name) {
         this.refFrame = refFrame;
@@ -78,8 +78,10 @@ public class Client {
     public ThreadClient getThreadClient() {
         return threadClient;
     }
-    
-    
+
+    public String getName() {
+        return name;
+    }
     
     
     

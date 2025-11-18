@@ -112,4 +112,14 @@ public class Cell {
         return this.owner;
     }
 
+    @Override
+    public String toString() {
+        return """
+               
+               Informacion Celda: 
+                   Cell{x = """ + x + ", y = " + y + "}\n     lifePercent =" + lifePercent + "\n     owner = " + owner + "\n     attackHistory = " + attackHistory + "\n     hasVolcano = " + hasVolcano + "\n     hasSwirl = " + hasSwirl + "\n     isRadioactive = " + isRadioactive;
+    }
+    
+     
+
 }
