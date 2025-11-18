@@ -46,6 +46,10 @@ public class modelClient {
                         return mostrarEstadoLocal();
                     case "QUERY_CELL":
                         return this.procesarQuerryCell(args);
+                    case "SHOW_ALIVE":
+                        return this.procesarShowAliveOccupied(args);
+                    case "SHOW_OCCUPIED":
+                        return this.procesarShowAliveOccupied(args);
                     default:
                         Command comando = CommandFactory.getCommand(args);
                         return enviarComandoServer(comando);
@@ -246,5 +250,29 @@ public class modelClient {
         } catch (Exception e) {
             return "Error inesperado: " + e.getMessage() + "\n";
         }
+    }
+    
+    public String procesarShowAliveOccupied(String[] args){
+        
+        if (args.length != 1){
+            return """
+                   Error: Formato incorrecto.
+                   Uso: SHOW_ALIVE / SHOW_OCCUPIED
+                   """;
+        }
+        
+        try {
+            Command comando = CommandFactory.getCommand(args);
+            
+            comando.processInClient(this.client);
+            
+            return "";
+            
+        } catch (NumberFormatException e) {
+            return "Error: Valores numéricos inválidos\n";
+        } catch (Exception e) {
+            return "Error inesperado: " + e.getMessage() + "\n";
+        }
+        
     }
 }

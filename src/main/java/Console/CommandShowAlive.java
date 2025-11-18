@@ -4,6 +4,10 @@
  */
 package Console;
 
+import Civilization.Civilization;
+import Fighters.Fighter;
+import Fighters.Groups.ChooseFighterGroup;
+import Game.GameClient.Client;
 import Game.GameServer.ThreadServidor;
 
 /**
@@ -18,12 +22,25 @@ public class CommandShowAlive extends Command {
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
-        this.setIsBroadcast(false);
+       // int ocupadorPorVolcanes = threadServidor.getCivilization().
+    }
+
+    /**
+     * Envía respuesta privada al cliente
+     */
+    private void sendResponse(ThreadServidor thread, String message) {
+        try {
+            thread.sendPrivateMessage(message);
+        } catch (Exception e) {
+            System.out.println("Error enviando respuesta: " + e.getMessage());
+        }
     }
     
-//    @Override
-//    public void processInClient(Client client) {
-//        System.out.println("Procesando un attack");
-//    }
+    @Override
+    public void processInClient(Client client) {
+        double percentage = client.getRefFrame().getMyCivilization().getMap().getAlivePercentage();
+        
+        client.getRefFrame().writeMessage("Porcentaje de celdas con vida: " + percentage);
+    }
     
 }

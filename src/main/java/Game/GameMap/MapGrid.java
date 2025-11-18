@@ -127,5 +127,37 @@ public class MapGrid {
 
         return totalCells > 0 ? (double) aliveCells / totalCells * 100.0 : 0.0;
     }
+    
+    public int getVolcanoOcupated(){
+        
+        int hasVolcano = 0;
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Cell cell = grid[i][j];
+                if (cell != null && cell.hasVolcano){
+                    hasVolcano++;
+                }
+            }
+        }
+        
+        return hasVolcano;
+    }
+    
+    public int getSwirlOcupated(){
+        
+        int hasSwirl = 0;
+        
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Cell cell = grid[i][j];
+                if (cell != null && cell.hasSwirl){
+                    hasSwirl++;
+                }
+            }
+        }
+        
+        return hasSwirl;
+    }
 
 }

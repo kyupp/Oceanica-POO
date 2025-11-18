@@ -107,6 +107,8 @@ public class FrameClient extends javax.swing.JFrame {
         registrarCivilizacionEnServidor();
     }
     
+    
+    
     /**
      * ✅ Inicializa los paneles personalizados de UI
      */
