@@ -27,6 +27,7 @@ public class Client {
     public ObjectOutputStream objectSender;
     private ThreadClient threadClient;
     
+    
     private String name;
 
     public Client(FrameClient refFrame, String name) {
@@ -44,6 +45,7 @@ public class Client {
             objectListener =  new ObjectInputStream (socket.getInputStream());
             
             threadClient =  new ThreadClient(this);
+            
             threadClient.start();
             
             

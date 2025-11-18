@@ -6,6 +6,7 @@ package Game.GameServer;
 
 import Civilization.Civilization;
 import Console.Command;
+import Game.GameClient.Client;
 import Game.GameController;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -46,6 +47,29 @@ public class Server {
         } catch (IOException ex) {
             refFrame.writeMessage("Error: " + ex.getMessage());
         }
+    }
+    
+    public void actualizarMapa(Client client){
+        
+        ThreadServidor threadClient = this.buscarThreadServidor(client);
+        
+        if (threadClient != null){
+            threadClient.getCivilization().setMap(client.getRefFrame().getMyCivilization().getMap());
+        }
+        
+    }
+    
+    public ThreadServidor buscarThreadServidor(Client client){
+        
+        String nameClient = client.getName();
+        
+        for (ThreadServidor clientThread : this.connectedClients){
+            if (nameClient.equals(clientThread.getClientName())){
+                return clientThread;
+            }
+        }
+        
+        return null;
     }
     
     void executeCommand(Command comando) {

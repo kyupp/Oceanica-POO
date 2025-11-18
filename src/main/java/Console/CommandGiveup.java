@@ -18,8 +18,7 @@ public class CommandGiveup  extends Command{
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
-        this.setIsBroadcast(true);
-        threadServidor.isActive = false;
+        threadServidor.getServer().getGameController().forceEndGame(threadServidor.getClientName());
     }
     
 //    @Override

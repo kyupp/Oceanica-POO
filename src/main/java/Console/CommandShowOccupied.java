@@ -4,6 +4,7 @@
  */
 package Console;
 
+import Game.GameClient.Client;
 import Game.GameServer.ThreadServidor;
 
 /**
@@ -21,9 +22,12 @@ public class CommandShowOccupied extends Command {
         this.setIsBroadcast(false);
     }
     
-//    @Override
-//    public void processInClient(Client client) {
-//        System.out.println("Procesando un attack");
-//    }
+    @Override
+    public void processInClient(Client client) {
+        int hasVolcano = client.getRefFrame().getMyCivilization().getMap().getVolcanoOcupated();
+        int hasSwirl = client.getRefFrame().getMyCivilization().getMap().getSwirlOcupated();
+        
+        client.getRefFrame().writeMessage("Celdas ocupadas por volcanes: " + hasVolcano + "\nCeldas ocupadas por remolinos: hasSwirl");
+    }
     
 }
