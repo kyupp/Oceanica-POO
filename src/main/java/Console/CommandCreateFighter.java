@@ -22,7 +22,7 @@ public class CommandCreateFighter extends Command {
 
     @Override
     public void processForServer(ThreadServidor threadServidor) {
-        // No es broadcast - solo confirmar al cliente
+        // ✅ No es broadcast - solo confirmar al cliente
         this.setIsBroadcast(false);
 
         String[] parameters = this.getParameters();
@@ -42,15 +42,15 @@ public class CommandCreateFighter extends Command {
             int civilization = Integer.parseInt(parameters[6]);
             String attackGroup = parameters[7];
 
-            //  Verificar que el jugador tenga civilización
+            // Verificar que el jugador tenga civilización
             if (!threadServidor.hasCivilization()) {
                 // Crear civilización si no existe
                 threadServidor.getServer().registerCivilization(threadServidor.name);
             }
 
             Civilization civ = threadServidor.getCivilization();
-
-            //  Validaciones en servidor
+            
+            // Validaciones en servidor
             if (civ.getFighters().size() >= 3) {
                 sendResponse(threadServidor, " Ya tienes 3 fighters");
                 return;
@@ -63,8 +63,8 @@ public class CommandCreateFighter extends Command {
             }
 
             if (totalPercent > 100) {
-                sendResponse(threadServidor,
-                        " Porcentaje total excedería 100% (actual: " + totalPercent + "%)");
+                sendResponse(threadServidor, 
+                    " Porcentaje total excedería 100% (actual: " + totalPercent + "%)");
                 return;
             }
 
@@ -83,14 +83,14 @@ public class CommandCreateFighter extends Command {
 
             // Log en servidor
             threadServidor.getServer().getRefFrame().writeMessage(
-                    String.format("%s creó fighter: %s (%s) - %d%% | Fighters: %d/3",
-                            threadServidor.name, name, attackGroup, civilization,
-                            civ.getFighters().size())
+                String.format(" %s creó fighter: %s (%s) - %d%% | Fighters: %d/3",
+                    threadServidor.name, name, attackGroup, civilization, 
+                    civ.getFighters().size())
             );
 
             // Confirmar al cliente
-            sendResponse(threadServidor,
-                    "Fighter registrado en servidor: " + name);
+            sendResponse(threadServidor, 
+                " Fighter registrado en servidor: " + name);
 
         } catch (NumberFormatException e) {
             sendResponse(threadServidor, " Error: valores numéricos inválidos");
