@@ -27,7 +27,7 @@ public class CommandShowOccupied extends Command {
         int hasVolcano = client.getRefFrame().getMyCivilization().getMap().getVolcanoOcupated();
         int hasSwirl = client.getRefFrame().getMyCivilization().getMap().getSwirlOcupated();
         
-        client.getRefFrame().writeMessage("Celdas ocupadas por volcanes: " + hasVolcano + "\nCeldas ocupadas por remolinos: hasSwirl");
+        client.getRefFrame().writeMessage("Celdas ocupadas por volcanes: " + hasVolcano + "\nCeldas ocupadas por remolinos: " + hasSwirl);
     }
     
 }
