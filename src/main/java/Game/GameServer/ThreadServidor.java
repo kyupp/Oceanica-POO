@@ -87,6 +87,16 @@ public class ThreadServidor extends Thread{
         }
     }
     
+    public void setClientName(String name) {
+        this.name = name;
+        this.setName("ClientThread-" + name); // Renombra el hilo en el sistema
+    }
+    
+    public String getClientName(){
+        return this.name;
+    }
+
+    
     public void showAllClients() {
         this.server.showAllNames();
     }
@@ -121,6 +131,14 @@ public class ThreadServidor extends Thread{
      */
     public Server getServer() {
         return server;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public void setSocket(Socket socket) {
+        this.socket = socket;
     }
     
     /**
@@ -160,7 +178,7 @@ public class ThreadServidor extends Thread{
     public void sendPrivateMessage(String message) {
         try {
             // Formato: ["MESSAGE", texto, "false"]
-            String[] args = new String[]{"MESSAGE", message, "false"};
+            String[] args = new String[]{"MESSAGE",message, "false"};
             CommandMessage cmd = new CommandMessage(args);
 
             objectSender.writeObject(cmd);

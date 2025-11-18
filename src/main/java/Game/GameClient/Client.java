@@ -47,6 +47,7 @@ public class Client {
             threadClient.start();
             
             
+            
             //envía el nombre
             String args[] = {"NAME", this.name};
             objectSender.writeObject(CommandFactory.getCommand(args));

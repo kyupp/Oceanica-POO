@@ -73,6 +73,7 @@ public class FrameClient extends javax.swing.JFrame {
         
         // Crear civilización local
         this.myCivilization = new Civilization(civilizationName);
+        
         System.out.println("DEBUG: Civilización creada");
         
         // Crear cliente con el nombre de civilización
@@ -86,7 +87,7 @@ public class FrameClient extends javax.swing.JFrame {
         System.out.println("DEBUG: Mapa creado");
         
         // Asociar el mapa a la civilización
-        myCivilization.setMap(map);
+        this.myCivilization.setMap(map);
         
         // Inicializar modelo y controlador
         this.model = new modelClient(this.client, this.myCivilization);
